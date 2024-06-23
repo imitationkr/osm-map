@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        #map { height: 600px; width: 100%; }
+        #map { height: 100vh; width: 100%; }
+        body { margin: 0; }
     </style>
 </head>
 <body>
-    <h1>Via Sacra Map</h1>
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         // Initialize the map
-        var map = L.map('map').setView([41.89193, 12.51133], 13);
+        var map = L.map('map').setView([41.89193, 12.51133], 16); // Zoom level set for walking route
 
-        // Add the OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // Add a topographic tile layer
+        L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)'
         }).addTo(map);
 
         // Add GeoJSON data for Via Sacra
@@ -47,7 +47,25 @@
         };
 
         // Add the GeoJSON data to the map
-        L.geoJSON(viaSacra).addTo(map);
+        L.geoJSON(viaSacra, {
+            style: function (feature) {
+                return { color: 'blue', weight: 5 };
+            }
+        }).addTo(map);
+
+        // Ensure the map fits the route
+        var bounds = L.geoJSON(viaSacra).getBounds();
+        map.fitBounds(bounds);
+
+        // Make the map responsive to mobile screens
+        function updateMapSize() {
+            document.getElementById('map').style.height = window.innerHeight + 'px';
+            document.getElementById('map').style.width = window.innerWidth + 'px';
+            map.invalidateSize();
+        }
+
+        window.addEventListener('resize', updateMapSize);
+        updateMapSize();
     </script>
 </body>
 </html>
