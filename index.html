@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Roman Forum Walking Tour</title>
+    <title>Roman Forum Touristic Walking Map</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -20,37 +20,18 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        var romanForumRoute = {
-            "type": "FeatureCollection",
-            "features": [
-                {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "LineString",
-                        "coordinates": [
-                            [12.490000, 41.891000], // Start near Arch of Titus
-                            // Add the simplified route coordinates here
-                            [12.490500, 41.892000],
-                            [12.491000, 41.893000],
-                            [12.492000, 41.894000],
-                            [12.490000, 41.891000] // End near Arch of Titus
-                        ]
-                    },
-                    "properties": {
-                        "name": "Roman Forum Walking Route"
-                    }
-                }
-            ]
-        };
+        var yellowLineCoordinates = [
+            [12.485120, 41.891450],
+            [12.485660, 41.891980],
+            [12.486200, 41.892450],
+            [12.486740, 41.892900],
+            [12.487280, 41.893350],
+            [12.487820, 41.893800]
+        ];
 
-        L.geoJSON(romanForumRoute, {
-            style: function (feature) {
-                return { color: 'blue', weight: 5 };
-            }
-        }).addTo(map);
+        var yellowLine = L.polyline(yellowLineCoordinates, {color: 'yellow', weight: 5}).addTo(map);
 
-        var bounds = L.geoJSON(romanForumRoute).getBounds();
-        map.fitBounds(bounds);
+        map.fitBounds(yellowLine.getBounds());
 
         function updateMapSize() {
             document.getElementById('map').style.height = window.innerHeight + 'px';
